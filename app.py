@@ -1,6 +1,9 @@
 import streamlit as st
 from datetime import datetime
 import time
+import streamlit.components.v1 as components
+
+# components.html(html_code, height=450)
 
 st.set_page_config(page_title="Wedding Countdown", layout="centered")
 
@@ -25,101 +28,86 @@ def get_event():
 
 event = get_event()
 
-while True:
-    now = datetime.now()
-    diff = event - now
+components.html(f"""
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.card {{
+    display: flex;
+    max-width: 800px;
+    margin: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.3);
+    font-family: Georgia, serif;
+}}
 
-    days = diff.days
-    hours = diff.seconds // 3600
-    minutes = (diff.seconds % 3600) // 60
-    seconds = diff.seconds % 60
+.left {{
+    width: 50%;
+    background: url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80') center/cover no-repeat;
+    min-height: 400px;
+}}
 
-    container.markdown(f"""
-    <style>
-    .card {{
-        display: flex;
-        max-width: 800px;
-        margin: auto;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0px 10px 40px rgba(0,0,0,0.3);
-        font-family: 'Georgia', serif;
-    }}
+.right {{
+    width: 50%;
+    background: #f7f7f7;
+    padding: 40px;
+    text-align: center;
+}}
 
-    .left {{
-        width: 50%;
-        background: url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80') center/cover no-repeat;
-        min-height: 400px;
-    }}
+.number {{
+    font-size: 32px;
+    font-weight: bold;
+}}
 
-    .right {{
-        width: 50%;
-        background: #f7f7f7;
-        padding: 40px;
-        text-align: center;
-    }}
+.label {{
+    font-size: 12px;
+    color: gray;
+}}
+</style>
+</head>
 
-    .title {{
-        font-size: 28px;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-    }}
+<body>
 
-    .subtitle {{
-        font-size: 14px;
-        color: gray;
-        margin-bottom: 30px;
-    }}
+<div class="card">
+    <div class="left"></div>
 
-    .timer {{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-    }}
+    <div class="right">
+        <h2>WE'RE GETTING MARRIED</h2>
+        <p>COUNTDOWN TO OUR BIG DAY</p>
 
-    .time-box {{
-        text-align: center;
-    }}
-
-    .number {{
-        font-size: 32px;
-        font-weight: bold;
-    }}
-
-    .label {{
-        font-size: 12px;
-        color: gray;
-        letter-spacing: 1px;
-    }}
-    </style>
-
-    <div class="card">
-        <div class="left"></div>
-
-        <div class="right">
-            <div class="title">WE'RE GETTING MARRIED</div>
-            <div class="subtitle">COUNTDOWN TO OUR BIG DAY</div>
-
-            <div class="timer">
-                <div class="time-box">
-                    <div class="number">{days:02}</div>
-                    <div class="label">DAYS</div>
-                </div>
-                <div class="time-box">
-                    <div class="number">{hours:02}</div>
-                    <div class="label">HOURS</div>
-                </div>
-                <div class="time-box">
-                    <div class="number">{minutes:02}</div>
-                    <div class="label">MINUTES</div>
-                </div>
-                <div class="time-box">
-                    <div class="number">{seconds:02}</div>
-                    <div class="label">SECONDS</div>
-                </div>
-            </div>
+        <div style="display:flex; justify-content:space-around;">
+            <div><div id="days" class="number"></div><div class="label">DAYS</div></div>
+            <div><div id="hours" class="number"></div><div class="label">HOURS</div></div>
+            <div><div id="minutes" class="number"></div><div class="label">MINUTES</div></div>
+            <div><div id="seconds" class="number"></div><div class="label">SECONDS</div></div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
 
-    time.sleep(1)
+<script>
+const eventDate = new Date("{event.strftime('%Y-%m-%d %H:%M:%S')}").getTime();
+
+setInterval(function() {{
+    const now = new Date().getTime();
+    const diff = eventDate - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("days").innerHTML = days.toString().padStart(2,'0');
+    document.getElementById("hours").innerHTML = hours.toString().padStart(2,'0');
+    document.getElementById("minutes").innerHTML = minutes.toString().padStart(2,'0');
+    document.getElementById("seconds").innerHTML = seconds.toString().padStart(2,'0');
+
+}}, 1000);
+</script>
+
+</body>
+</html>
+""", height=450)
+
+time.sleep(1)
