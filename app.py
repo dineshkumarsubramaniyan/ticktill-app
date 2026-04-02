@@ -1,17 +1,15 @@
 import streamlit as st
 from datetime import datetime
-import time
 import streamlit.components.v1 as components
 
-# components.html(html_code, height=450)
-
+# ✅ MUST be first
 st.set_page_config(
     page_title="TickTill 💍",
     page_icon="💍",
     layout="centered"
 )
 
-# Hide Streamlit UI
+# ✅ Hide Streamlit UI
 st.markdown("""
 <style>
 #MainMenu {visibility: hidden;}
@@ -20,9 +18,29 @@ header {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
-# Main container
-container = st.empty()
+# ✅ PWA + Mobile Install Config (VERY IMPORTANT)
+st.markdown("""
+<link rel="manifest" href="data:application/manifest+json,{
+    \\"name\\": \\"TickTill 💍\\",
+    \\"short_name\\": \\"TickTill\\",
+    \\"start_url\\": \\"/\\",
+    \\"display\\": \\"standalone\\",
+    \\"background_color\\": \\"#f4f4f4\\",
+    \\"theme_color\\": \\"#f4f4f4\\",
+    \\"icons\\": [
+        {
+            \\"src\\": \\"https://cdn-icons-png.flaticon.com/512/833/833472.png\\",
+            \\"sizes\\": \\"512x512\\",
+            \\"type\\": \\"image/png\\"
+        }
+    ]
+}">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/833/833472.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TickTill">
+""", unsafe_allow_html=True)
 
+# ✅ Event date logic
 def get_event():
     now = datetime.now()
     event = datetime(now.year, 9, 13, 0, 0, 0)
@@ -32,6 +50,7 @@ def get_event():
 
 event = get_event()
 
+# ✅ Beautiful Responsive UI + JS countdown
 components.html(f"""
 <!DOCTYPE html>
 <html>
@@ -42,14 +61,14 @@ components.html(f"""
 <style>
 body {{
     margin: 0;
-    padding: 0;
+    padding: 10px;
     background: #f4f4f4;
     font-family: 'Georgia', serif;
 }}
 
 .container {{
     max-width: 420px;
-    margin: 20px auto;
+    margin: auto;
     background: white;
     border-radius: 20px;
     overflow: hidden;
@@ -85,7 +104,7 @@ body {{
 .timer {{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 15px;
 }}
 
 .box {{
@@ -148,6 +167,4 @@ setInterval(function() {{
 
 </body>
 </html>
-""", height=600)
-
-time.sleep(1)
+""", height=620)
