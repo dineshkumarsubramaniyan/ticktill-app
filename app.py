@@ -33,7 +33,7 @@ st.markdown("""
     }
 
     .count {
-        font-size: 50px;
+        font-size: 40px;
         font-weight: bold;
     }
 
@@ -41,17 +41,40 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<div class='card'>", unsafe_allow_html=True)
-
 st.markdown("<div class='title'>📅 Event on Sept 13</div>", unsafe_allow_html=True)
 
-today = datetime.now()
-event = datetime(today.year, 9, 13)
+# Placeholder for live countdown
+countdown_placeholder = st.empty()
 
-if today > event:
-    event = datetime(today.year + 1, 9, 13)
+# Set event date
+def get_event_date():
+    now = datetime.now()
+    event_date = datetime(now.year, 9, 13)
 
-days = (event - today).days
+    if now > event_date:
+        event_date = datetime(now.year + 1, 9, 13)
 
-st.markdown(f"<div class='count'>⏳ {days} days</div>", unsafe_allow_html=True)
+    return event_date
+
+event = get_event_date()
+
+# Live countdown loop
+while True:
+    now = datetime.now()
+    diff = event - now
+
+    days = diff.days
+    seconds = diff.seconds
+
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    secs = seconds % 60
+
+    countdown_placeholder.markdown(
+        f"<div class='count'>⏳ {days}d {hours}h {minutes}m {secs}s</div>",
+        unsafe_allow_html=True
+    )
+
+    time.sleep(1)
 
 st.markdown("</div>", unsafe_allow_html=True)
