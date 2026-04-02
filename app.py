@@ -5,7 +5,11 @@ import streamlit.components.v1 as components
 
 # components.html(html_code, height=450)
 
-st.set_page_config(page_title="Wedding Countdown", layout="centered")
+st.set_page_config(
+    page_title="TickTill 💍",
+    page_icon="💍",
+    layout="centered"
+)
 
 # Hide Streamlit UI
 st.markdown("""
