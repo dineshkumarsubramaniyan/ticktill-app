@@ -8,6 +8,7 @@ def get_js(event_str, audio_available, popup_message=""):
         const audioEnabled = {audio_enabled};
         const audio = document.getElementById("bg-music");
         const btn = document.getElementById("music-btn");
+        const chatBtn = document.getElementById("chat-fab");
         const icon = document.getElementById("music-icon");
         const numberIds = ["days", "hours", "minutes", "seconds"];
         const previousValues = new Map();
@@ -48,6 +49,21 @@ def get_js(event_str, audio_available, popup_message=""):
           if (src) {{
             audio.src = src;
             sourceLoaded = true;
+          }}
+        }}
+
+        function navigateToChat() {{
+          if (!chatBtn) {{
+            return;
+          }}
+          const href = chatBtn.dataset.chatHref;
+          if (!href) {{
+            return;
+          }}
+          try {{
+            window.top.location.href = href;
+          }} catch (err) {{
+            window.parent.location.href = href;
           }}
         }}
 
@@ -110,6 +126,9 @@ def get_js(event_str, audio_available, popup_message=""):
         btn.addEventListener("click", toggleMusic);
         btn.addEventListener("mouseup", function() {{ btn.blur(); }});
         btn.addEventListener("touchend", function() {{ btn.blur(); }});
+        if (chatBtn) {{
+          chatBtn.addEventListener("click", navigateToChat);
+        }}
         audio.addEventListener("playing", setPauseState);
         audio.addEventListener("canplay", function() {{ if (!audio.paused) {{ setPauseState(); }} }});
         audio.addEventListener("waiting", function() {{ if (!audio.paused) {{ setLoadingState(); }} }});

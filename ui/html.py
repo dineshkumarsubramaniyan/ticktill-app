@@ -19,7 +19,7 @@ def get_html(audio_src, audio_available, chat_href="#"):
           <span id="music-icon" class="music-icon">&#9654;</span>
         </button>
 
-        <a class="chat-fab" href="{chat_href}" target="_top">Message</a>
+        <button id="chat-fab" class="chat-fab" type="button" data-chat-href="{chat_href}">Message</button>
 
         <div class="content">
           <div class="eyebrow">Save the date</div>
