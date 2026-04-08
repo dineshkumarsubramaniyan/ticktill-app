@@ -23,7 +23,7 @@ header {visibility: hidden;}
 """, unsafe_allow_html=True)
 
 visitor_name = get_visitor_name(st.query_params)
-if visitor_name and not st.session_state.get("visitor_tracked"):
+if not st.session_state.get("visitor_tracked"):
     track_visitor_open(visitor_name)
     st.session_state["visitor_tracked"] = True
 

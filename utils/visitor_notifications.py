@@ -12,7 +12,8 @@ def get_visitor_name(query_params):
     visitor = query_params.get("visitor", "")
     if isinstance(visitor, list):
         visitor = visitor[0] if visitor else ""
-    return str(visitor).strip()
+    visitor = str(visitor).strip()
+    return visitor or "anonymous"
 
 
 def build_event(visitor_name):
@@ -37,9 +38,7 @@ def send_telegram_message(event):
     if not bot_token or not chat_id:
         return False
 
-    message = (
-        f"TickTill opened by {event['visitor']} on {event['opened_at']}"
-    )
+    message = f"TickTill opened by {event['visitor']} on {event['opened_at']}"
     payload = parse.urlencode({
         "chat_id": chat_id,
         "text": message,
@@ -55,9 +54,6 @@ def send_telegram_message(event):
 
 
 def track_visitor_open(visitor_name):
-    if not visitor_name:
-        return None
-
     event = build_event(visitor_name)
     append_event_log(event)
     event["telegram_sent"] = send_telegram_message(event)
