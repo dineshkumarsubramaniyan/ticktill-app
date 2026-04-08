@@ -18,7 +18,6 @@ def get_js(event_str, audio_available):
           btn.classList.remove("loading");
           icon.innerHTML = "&#9654;";
           btn.setAttribute("aria-label", "Play background music");
-          btn.setAttribute("title", "Play background music");
         }}
 
         function setPauseState() {{
@@ -26,7 +25,6 @@ def get_js(event_str, audio_available):
           btn.classList.remove("loading");
           icon.innerHTML = "&#10074;&#10074;";
           btn.setAttribute("aria-label", "Pause background music");
-          btn.setAttribute("title", "Pause background music");
         }}
 
         function setLoadingState() {{
@@ -34,7 +32,6 @@ def get_js(event_str, audio_available):
           btn.classList.add("loading");
           icon.innerHTML = "";
           btn.setAttribute("aria-label", "Loading background music");
-          btn.setAttribute("title", "Loading background music");
         }}
 
         function ensureAudioSource() {{
@@ -90,6 +87,8 @@ def get_js(event_str, audio_available):
         }}
 
         btn.addEventListener("click", toggleMusic);
+        btn.addEventListener("mouseup", function() {{ btn.blur(); }});
+        btn.addEventListener("touchend", function() {{ btn.blur(); }});
         audio.addEventListener("playing", setPauseState);
         audio.addEventListener("canplay", function() {{
           if (!audio.paused) {{

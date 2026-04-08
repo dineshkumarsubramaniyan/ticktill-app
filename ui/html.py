@@ -1,6 +1,5 @@
 def get_html(audio_src, audio_available):
     disabled_attr = "" if audio_available else "disabled"
-    button_title = "Play background music" if audio_available else "Audio unavailable"
     audio_markup = (
         f'<audio id="bg-music" loop playsinline preload="none" data-src="{audio_src}"></audio>'
         if audio_available
@@ -9,9 +8,6 @@ def get_html(audio_src, audio_available):
 
     return f"""
     <div class="shell">
-      <div class="glow glow-one"></div>
-      <div class="glow glow-two"></div>
-
       <div class="app">
         {audio_markup}
 
@@ -19,7 +15,7 @@ def get_html(audio_src, audio_available):
           <div class="hero-overlay"></div>
         </div>
 
-        <button id="music-btn" class="music-btn" type="button" aria-label="Play background music" title="{button_title}" {disabled_attr}>
+        <button id="music-btn" class="music-btn" type="button" aria-label="Play background music" {disabled_attr}>
           <span id="music-icon" class="music-icon">&#9654;</span>
         </button>
 

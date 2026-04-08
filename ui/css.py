@@ -13,16 +13,16 @@ img_base64 = get_base64_image(BASE_DIR / "images" / "kids.png")
 
 def get_css():
     return f"""
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap');
 
     :root {{
       --text: #2f211d;
       --muted: #85706a;
       --accent: #b78474;
-      --shadow: 0 28px 70px rgba(108, 72, 59, 0.18);
-      --shell-pad-x: clamp(8px, 3vw, 14px);
-      --shell-pad-top: clamp(8px, 2.8vw, 16px);
-      --shell-pad-bottom: clamp(18px, 5vw, 32px);
+      --shadow: 0 22px 50px rgba(108, 72, 59, 0.16);
+      --shell-pad-x: clamp(6px, 2.5vw, 12px);
+      --shell-pad-top: clamp(6px, 2.2vw, 12px);
+      --shell-pad-bottom: clamp(12px, 4vw, 22px);
       --card-radius: clamp(24px, 6vw, 30px);
       --hero-height: clamp(220px, 56vw, 290px);
       --content-pad-x: clamp(16px, 4.8vw, 24px);
@@ -30,7 +30,7 @@ def get_css():
       --title-size: clamp(2rem, 8vw, 2.7rem);
       --tagline-size: clamp(0.88rem, 3.2vw, 1rem);
       --date-size: clamp(0.88rem, 3.3vw, 1rem);
-      --number-size: clamp(1.9rem, 8vw, 2.45rem);
+      --number-size: clamp(2rem, 8vw, 2.35rem);
       --label-size: clamp(0.62rem, 2.2vw, 0.72rem);
       --button-size: clamp(44px, 12vw, 50px);
       --countdown-gap: clamp(10px, 3vw, 14px);
@@ -54,46 +54,18 @@ def get_css():
     }}
 
     .shell {{
-      position: relative;
       width: min(100%, 430px);
-      padding: var(--shell-pad-top) var(--shell-pad-x) var(--shell-pad-bottom);
+      padding: 0 var(--shell-pad-x);
       box-sizing: border-box;
-      overflow: hidden;
-    }}
-
-    .glow {{
-      position: absolute;
-      border-radius: 999px;
-      filter: blur(18px);
-      opacity: 0.6;
-      pointer-events: none;
-    }}
-
-    .glow-one {{
-      top: clamp(22px, 6vw, 30px);
-      right: 6px;
-      width: clamp(72px, 22vw, 92px);
-      height: clamp(72px, 22vw, 92px);
-      background: rgba(238, 210, 196, 0.75);
-    }}
-
-    .glow-two {{
-      left: -10px;
-      bottom: clamp(58px, 16vw, 76px);
-      width: clamp(84px, 28vw, 110px);
-      height: clamp(84px, 28vw, 110px);
-      background: rgba(255, 236, 224, 0.7);
     }}
 
     .app {{
       position: relative;
       width: 100%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,250,247,0.98) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(255,250,247,0.99) 100%);
       border-radius: var(--card-radius);
       overflow: hidden;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
     }}
 
     .hero {{
@@ -106,7 +78,7 @@ def get_css():
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(180deg, rgba(66, 40, 36, 0.02) 0%, rgba(66, 40, 36, 0.18) 100%),
+        linear-gradient(180deg, rgba(66, 40, 36, 0.02) 0%, rgba(66, 40, 36, 0.16) 100%),
         linear-gradient(180deg, rgba(255,255,255,0) 56%, rgba(255,250,247,0.96) 100%);
     }}
 
@@ -173,8 +145,8 @@ def get_css():
       padding: var(--countdown-pad-y) var(--countdown-pad-x);
       border-radius: clamp(16px, 5vw, 20px);
       background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(249,244,240,0.98) 100%);
-      border: 1px solid rgba(183, 132, 116, 0.1);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 20px rgba(125, 91, 79, 0.06);
+      border: 1px solid rgba(183, 132, 116, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 8px 18px rgba(125, 91, 79, 0.05);
     }}
 
     .accent-box {{
@@ -182,7 +154,7 @@ def get_css():
     }}
 
     .number {{
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Playfair Display', serif;
       font-size: var(--number-size);
       font-weight: 700;
       line-height: 1;
@@ -208,8 +180,9 @@ def get_css():
       padding: 0;
       appearance: none;
       -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
       background: rgba(255, 255, 255, 0.84);
-      border: 1px solid rgba(255,255,255,0.55);
+      border: none;
       outline: none;
       border-radius: 999px;
       color: #4b3b35;
@@ -226,8 +199,11 @@ def get_css():
       background: rgba(255, 255, 255, 0.92);
     }}
 
-    .music-btn:focus {{
+    .music-btn:focus,
+    .music-btn:active {{
       outline: none;
+      border: none;
+      box-shadow: 0 10px 22px rgba(84, 57, 50, 0.14);
     }}
 
     .music-btn:disabled {{
@@ -268,8 +244,8 @@ def get_css():
 
     @media (max-width: 340px) {{
       .shell {{
-        padding-left: 6px;
-        padding-right: 6px;
+        padding-left: 4px;
+        padding-right: 4px;
       }}
 
       .content {{
