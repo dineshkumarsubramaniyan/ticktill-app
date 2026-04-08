@@ -4,12 +4,13 @@ import streamlit.components.v1 as components
 from ui.css import get_css
 from ui.html import get_html
 from ui.js import get_js
+from ui.media import get_audio_source
 from utils.date_utils import get_event_date
 
 # Config
 st.set_page_config(
-    page_title="TickTill 💍",
-    page_icon="💍",
+    page_title="TickTill",
+    page_icon="*",
     layout="centered"
 )
 
@@ -25,13 +26,14 @@ header {visibility: hidden;}
 # Get event date
 event = get_event_date()
 event_str = event.strftime('%Y-%m-%d %H:%M:%S')
+audio_src, audio_available = get_audio_source()
 
 # Combine all parts
 full_code = f"""
 <style>{get_css()}</style>
-{get_html()}
-{get_js(event_str)}
+{get_html(audio_src, audio_available)}
+{get_js(event_str, audio_available)}
 """
 
 # Render
-components.html(full_code, height=650)
+components.html(full_code, height=700)

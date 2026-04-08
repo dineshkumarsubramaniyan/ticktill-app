@@ -1,8 +1,21 @@
-def get_html():
-    return """
+def get_html(audio_src, audio_available):
+    disabled_attr = "" if audio_available else "disabled"
+    button_title = "Play background music" if audio_available else "Add ui/audio/background.mp3 to enable music"
+    audio_markup = (
+        f"""<audio id=\"bg-music\" loop playsinline preload=\"auto\">\n  <source src=\"{audio_src}\" type=\"audio/mpeg\">\n</audio>"""
+        if audio_available
+        else '<audio id="bg-music" preload="auto"></audio>'
+    )
+
+    return f"""
     <div class="app">
+      {audio_markup}
 
       <div class="hero"></div>
+
+      <button id="music-btn" class="music-btn" type="button" aria-label="Play background music" title="{button_title}" {disabled_attr}>
+        <span id="music-icon" class="music-icon">&#9654;</span>
+      </button>
 
       <div class="content">
         <div class="names">WE'RE GETTING MARRIED</div>
@@ -31,6 +44,5 @@ def get_html():
           </div>
         </div>
       </div>
-
     </div>
     """
