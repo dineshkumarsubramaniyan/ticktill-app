@@ -54,18 +54,22 @@ components.html(full_code, height=820, scrolling=False)
 st.markdown("### Private Chat")
 st.caption("Messages you send to the bot appear here. Replies typed here will be sent back to Telegram.")
 
-thread = get_chat_thread(visitor_name)
-for item in thread:
-    if item.get("direction") == "owner_to_visitor":
-        with st.chat_message("assistant"):
-            st.write(item.get("text", ""))
-    else:
-        with st.chat_message("user"):
-            st.write(item.get("text", ""))
+@st.fragment(run_every="4s")
+def render_chat_panel():
+    thread = get_chat_thread(visitor_name)
+    for item in thread:
+        if item.get("direction") == "owner_to_visitor":
+            with st.chat_message("assistant"):
+                st.write(item.get("text", ""))
+        else:
+            with st.chat_message("user"):
+                st.write(item.get("text", ""))
 
-reply = st.chat_input(f"Reply as {visitor_name}...")
-if reply:
-    if send_visitor_reply(visitor_name, reply):
-        st.rerun()
-    else:
-        st.error("Could not send the reply to Telegram. Check your app secrets and bot setup.")
+    reply = st.chat_input(f"Reply as {visitor_name}...", key="visitor_reply_input")
+    if reply:
+        if send_visitor_reply(visitor_name, reply):
+            st.rerun()
+        else:
+            st.error("Could not send the reply to Telegram. Check your app secrets and bot setup.")
+
+render_chat_panel()
