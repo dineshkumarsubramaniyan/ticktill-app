@@ -87,73 +87,6 @@ def get_css():
         linear-gradient(180deg, rgba(255,255,255,0) 56%, rgba(255,250,247,0.96) 100%);
     }}
 
-    .telegram-popup {{
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: rgba(45, 29, 26, 0.36);
-      backdrop-filter: blur(4px);
-      z-index: 20;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 240ms ease;
-    }}
-
-    .telegram-popup.is-visible {{
-      opacity: 1;
-      pointer-events: auto;
-    }}
-
-    .telegram-popup-card {{
-      position: relative;
-      width: min(100%, 290px);
-      padding: 26px 22px 22px;
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,248,245,0.98) 0%, rgba(255,252,250,0.98) 100%);
-      box-shadow: 0 20px 40px rgba(61, 36, 33, 0.18);
-      text-align: center;
-      transform: translateY(16px) scale(0.96);
-      transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
-    }}
-
-    .telegram-popup.is-visible .telegram-popup-card {{
-      transform: translateY(0) scale(1);
-    }}
-
-    .telegram-popup-close {{
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 28px;
-      height: 28px;
-      border: none;
-      border-radius: 999px;
-      background: rgba(111, 81, 72, 0.08);
-      color: #6f5148;
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-    }}
-
-    .telegram-popup-label {{
-      font-size: 11px;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }}
-
-    .telegram-popup-text {{
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.9rem;
-      line-height: 1.05;
-      color: #2d1d1a;
-      text-wrap: balance;
-    }}
-
     .content {{
       position: relative;
       padding: var(--content-pad-y) var(--content-pad-x);
@@ -198,6 +131,25 @@ def get_css():
     .music-icon {{ display: flex; align-items: center; justify-content: center; width: clamp(18px, 4.8vw, 20px); height: clamp(18px, 4.8vw, 20px); font-size: clamp(16px, 4.4vw, 18px); line-height: 1; }}
     .music-btn.loading .music-icon {{ width: clamp(16px, 4.2vw, 18px); height: clamp(16px, 4.2vw, 18px); border: 2px solid rgba(75, 59, 53, 0.22); border-top-color: #4b3b35; border-radius: 50%; animation: music-spin 0.8s linear infinite; font-size: 0; }}
 
+    .chat-fab {{
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #c88870 0%, #b86e57 100%);
+      color: #fffaf7;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      box-shadow: 0 14px 26px rgba(184, 110, 87, 0.28);
+      z-index: 12;
+    }}
+
     @keyframes app-reveal {{ to {{ opacity: 1; transform: translateY(0) scale(1); }} }}
     @keyframes fade-up {{ to {{ opacity: 1; transform: translateY(0); }} }}
     @keyframes hero-drift {{ from {{ transform: scale(1) translateY(0); }} to {{ transform: scale(1.045) translateY(-4px); }} }}
@@ -206,12 +158,10 @@ def get_css():
     @keyframes music-pulse {{ 0%, 100% {{ box-shadow: 0 10px 22px rgba(84, 57, 50, 0.14); transform: scale(1); }} 50% {{ box-shadow: 0 0 0 10px rgba(183, 132, 116, 0.08), 0 12px 24px rgba(84, 57, 50, 0.18); transform: scale(1.02); }} }}
 
     @media (prefers-reduced-motion: reduce) {{
-      .app, .hero, .eyebrow, .names, .tagline, .date-pill, .divider, .box, .music-btn.playing, .number.tick {{
-        animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important;
-      }}
-      .telegram-popup, .telegram-popup-card {{ transition: none !important; }}
+      .app, .hero, .eyebrow, .names, .tagline, .date-pill, .divider, .box, .music-btn.playing, .number.tick {{ animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important; }}
     }}
 
-    @media (max-width: 340px) {{ .shell {{ padding-left: 4px; padding-right: 4px; }} .content {{ padding-left: 14px; padding-right: 14px; }} .label {{ letter-spacing: 0.18em; }} .telegram-popup-card {{ padding: 24px 18px 18px; }} .telegram-popup-text {{ font-size: 1.65rem; }} }}
-    @media (max-height: 740px) and (orientation: landscape) {{ :root {{ --hero-height: clamp(180px, 42vw, 220px); --title-size: clamp(1.75rem, 4vw, 2.1rem); --number-size: clamp(1.5rem, 4vw, 1.9rem); }} body {{ padding-top: 8px; padding-bottom: 16px; }} .shell {{ width: min(100%, 520px); }} .content {{ padding-top: 16px; padding-bottom: 18px; }} .countdown {{ gap: 10px; }} .box {{ padding-top: 12px; padding-bottom: 12px; }} }}
+    @media (max-width: 340px) {{ .shell {{ padding-left: 4px; padding-right: 4px; }} .content {{ padding-left: 14px; padding-right: 14px; padding-bottom: 74px; }} .label {{ letter-spacing: 0.18em; }} }}
+    @media (min-width: 341px) {{ .content {{ padding-bottom: 82px; }} }}
+    @media (max-height: 740px) and (orientation: landscape) {{ :root {{ --hero-height: clamp(180px, 42vw, 220px); --title-size: clamp(1.75rem, 4vw, 2.1rem); --number-size: clamp(1.5rem, 4vw, 1.9rem); }} body {{ padding-top: 8px; padding-bottom: 16px; }} .shell {{ width: min(100%, 520px); }} .content {{ padding-top: 16px; padding-bottom: 72px; }} .countdown {{ gap: 10px; }} .box {{ padding-top: 12px; padding-bottom: 12px; }} }}
     """
