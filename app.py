@@ -74,7 +74,7 @@ def render_chat_html(thread, back_href):
         "<style>",
         "body{margin:0;background:#f7efe9;font-family:Outfit,system-ui,sans-serif;color:#2f211d;}",
         ".chat-page{height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#fbf6f2 0%,#f7efe9 100%);}",
-        ".chat-header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,252,249,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(184,110,87,0.12);}",
+        ".chat-header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,252,249,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(184,110,87,0.12);} ",
         ".back-link{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:#f4e5dc;color:#8f5e4d;text-decoration:none;font-size:18px;font-weight:700;}",
         ".chat-title{display:flex;flex-direction:column;gap:2px;}",
         ".chat-title strong{font-size:1rem;color:#2f211d;}",
@@ -145,12 +145,10 @@ def render_chat_page(visitor_name):
     if st.button("Back", key="back_home_button"):
         go_to_view("home", visitor_name)
 
-    chat_placeholder = st.empty()
-
     @st.fragment(run_every="3s")
     def render_chat_messages():
         thread = get_chat_thread(visitor_name)
-        chat_placeholder.components.html(render_chat_html(thread, back_href), height=CHAT_HEIGHT, scrolling=False)
+        components.html(render_chat_html(thread, back_href), height=CHAT_HEIGHT, scrolling=False)
 
     render_chat_messages()
 
