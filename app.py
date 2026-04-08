@@ -25,19 +25,47 @@ def build_nav_link(view, visitor_name):
     return f"?view={view}{visitor_part}"
 
 
+def go_to_view(view, visitor_name):
+    st.query_params["view"] = view
+    st.query_params["visitor"] = visitor_name
+    st.rerun()
+
+
 def render_home_page(visitor_name):
     event = get_event_date()
     event_str = event.strftime('%Y-%m-%d %H:%M:%S')
     audio_src, audio_available = get_audio_source()
-    chat_href = build_nav_link("chat", visitor_name)
 
     full_code = f"""
     <style>{get_css()}</style>
-    {get_html(audio_src, audio_available, chat_href)}
+    {get_html(audio_src, audio_available, "#")}
     {get_js(event_str, audio_available, "")}
     """
 
     components.html(full_code, height=860, scrolling=False)
+
+    st.markdown("""
+    <style>
+    div[data-testid="stButton"] > button[kind="secondary"] {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      min-width: 160px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(180deg, #c88870 0%, #b86e57 100%);
+      color: #fffaf7;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      box-shadow: 0 14px 26px rgba(184, 110, 87, 0.28);
+      z-index: 1000;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    if st.button("Message", key="open_chat_button", type="secondary"):
+        go_to_view("chat", visitor_name)
 
 
 def render_chat_html(thread, back_href):
@@ -114,26 +142,29 @@ def render_chat_page(visitor_name):
     </style>
     """, unsafe_allow_html=True)
 
+    if st.button("Back", key="back_home_button"):
+        go_to_view("home", visitor_name)
+
     chat_placeholder = st.empty()
 
     @st.fragment(run_every="3s")
     def render_chat_messages():
-      thread = get_chat_thread(visitor_name)
-      chat_placeholder.components.html(render_chat_html(thread, back_href), height=CHAT_HEIGHT, scrolling=False)
+        thread = get_chat_thread(visitor_name)
+        chat_placeholder.components.html(render_chat_html(thread, back_href), height=CHAT_HEIGHT, scrolling=False)
 
     render_chat_messages()
 
     with st.container():
-      st.markdown("<div class='chat-compose-wrap'>", unsafe_allow_html=True)
-      with st.form("reply_form", clear_on_submit=True):
-          reply = st.text_area("Reply", label_visibility="collapsed", placeholder=f"Message as {visitor_name}...")
-          submitted = st.form_submit_button("Send")
-          if submitted:
-              if send_visitor_reply(visitor_name, reply):
-                  st.rerun()
-              else:
-                  st.error("Could not send the reply to Telegram. Check your app secrets and bot setup.")
-      st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("<div class='chat-compose-wrap'>", unsafe_allow_html=True)
+        with st.form("reply_form", clear_on_submit=True):
+            reply = st.text_area("Reply", label_visibility="collapsed", placeholder=f"Message as {visitor_name}...")
+            submitted = st.form_submit_button("Send")
+            if submitted:
+                if send_visitor_reply(visitor_name, reply):
+                    st.rerun()
+                else:
+                    st.error("Could not send the reply to Telegram. Check your app secrets and bot setup.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 st.set_page_config(page_title="TickTill", page_icon="*", layout="centered")
