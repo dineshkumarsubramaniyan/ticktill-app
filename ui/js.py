@@ -10,6 +10,45 @@ def get_js(event_str, audio_available):
         const btn = document.getElementById("music-btn");
         const icon = document.getElementById("music-icon");
 
+        let sourceLoaded = false;
+        let isLoading = false;
+
+        function setPlayState() {{
+          isLoading = false;
+          btn.classList.remove("loading");
+          icon.innerHTML = "&#9654;";
+          btn.setAttribute("aria-label", "Play background music");
+          btn.setAttribute("title", "Play background music");
+        }}
+
+        function setPauseState() {{
+          isLoading = false;
+          btn.classList.remove("loading");
+          icon.innerHTML = "&#10074;&#10074;";
+          btn.setAttribute("aria-label", "Pause background music");
+          btn.setAttribute("title", "Pause background music");
+        }}
+
+        function setLoadingState() {{
+          isLoading = true;
+          btn.classList.add("loading");
+          icon.innerHTML = "";
+          btn.setAttribute("aria-label", "Loading background music");
+          btn.setAttribute("title", "Loading background music");
+        }}
+
+        function ensureAudioSource() {{
+          if (!audioEnabled || sourceLoaded) {{
+            return;
+          }}
+
+          const src = audio.dataset.src;
+          if (src) {{
+            audio.src = src;
+            sourceLoaded = true;
+          }}
+        }}
+
         if (audioEnabled) {{
           audio.volume = 1.0;
         }}
@@ -30,34 +69,46 @@ def get_js(event_str, audio_available):
         }}
 
         async function toggleMusic() {{
-          if (!audioEnabled) {{
+          if (!audioEnabled || isLoading) {{
             return;
           }}
 
           if (audio.paused) {{
             try {{
+              ensureAudioSource();
+              setLoadingState();
               await audio.play();
-              icon.innerHTML = "&#10074;&#10074;";
-              btn.setAttribute("aria-label", "Pause background music");
-              btn.setAttribute("title", "Pause background music");
+              setPauseState();
             }} catch (err) {{
               console.error("Play failed:", err);
+              setPlayState();
             }}
           }} else {{
             audio.pause();
-            icon.innerHTML = "&#9654;";
-            btn.setAttribute("aria-label", "Play background music");
-            btn.setAttribute("title", "Play background music");
+            setPlayState();
           }}
         }}
 
         btn.addEventListener("click", toggleMusic);
-        audio.addEventListener("ended", function() {{
-          icon.innerHTML = "&#9654;";
-          btn.setAttribute("aria-label", "Play background music");
-          btn.setAttribute("title", "Play background music");
+        audio.addEventListener("playing", setPauseState);
+        audio.addEventListener("canplay", function() {{
+          if (!audio.paused) {{
+            setPauseState();
+          }}
+        }});
+        audio.addEventListener("waiting", function() {{
+          if (!audio.paused) {{
+            setLoadingState();
+          }}
+        }});
+        audio.addEventListener("pause", setPlayState);
+        audio.addEventListener("ended", setPlayState);
+        audio.addEventListener("error", function(err) {{
+          console.error("Audio error:", err);
+          setPlayState();
         }});
 
+        setPlayState();
         updateCountdown();
         setInterval(updateCountdown, 1000);
     }};

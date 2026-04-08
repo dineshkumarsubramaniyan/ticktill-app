@@ -136,8 +136,32 @@ def get_css():
       box-shadow: 0 6px 18px rgba(0,0,0,0.10);
     }}
 
+    .music-btn.loading {{
+      cursor: progress;
+    }}
+
     .music-icon {{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
       font-size: 20px;
       line-height: 1;
+    }}
+
+    .music-btn.loading .music-icon {{
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(75, 59, 53, 0.22);
+      border-top-color: #4b3b35;
+      border-radius: 50%;
+      animation: music-spin 0.8s linear infinite;
+      font-size: 0;
+    }}
+
+    @keyframes music-spin {{
+      from {{ transform: rotate(0deg); }}
+      to {{ transform: rotate(360deg); }}
     }}
     """

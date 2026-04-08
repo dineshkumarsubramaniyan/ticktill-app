@@ -1,10 +1,10 @@
 def get_html(audio_src, audio_available):
     disabled_attr = "" if audio_available else "disabled"
-    button_title = "Play background music" if audio_available else "Add ui/audio/background.mp3 to enable music"
+    button_title = "Play background music" if audio_available else "Audio unavailable"
     audio_markup = (
-        f"""<audio id=\"bg-music\" loop playsinline preload=\"auto\">\n  <source src=\"{audio_src}\" type=\"audio/mpeg\">\n</audio>"""
+        f'<audio id="bg-music" loop playsinline preload="none" data-src="{audio_src}"></audio>'
         if audio_available
-        else '<audio id="bg-music" preload="auto"></audio>'
+        else '<audio id="bg-music" preload="none"></audio>'
     )
 
     return f"""
