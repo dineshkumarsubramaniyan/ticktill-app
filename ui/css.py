@@ -66,12 +66,17 @@ def get_css():
       border-radius: var(--card-radius);
       overflow: hidden;
       box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(20px) scale(0.985);
+      animation: app-reveal 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }}
 
     .hero {{
       position: relative;
       height: var(--hero-height);
       background: url('data:image/png;base64,{img_base64}') center top/cover no-repeat;
+      transform-origin: center center;
+      animation: hero-drift 16s ease-in-out infinite alternate;
     }}
 
     .hero-overlay {{
@@ -90,12 +95,23 @@ def get_css():
       color: var(--text);
     }}
 
+    .eyebrow,
+    .names,
+    .tagline,
+    .date-pill,
+    .divider {{
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fade-up 720ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }}
+
     .eyebrow {{
       font-size: clamp(10px, 2.8vw, 11px);
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: clamp(8px, 2vw, 10px);
+      animation-delay: 120ms;
     }}
 
     .names {{
@@ -106,6 +122,7 @@ def get_css():
       letter-spacing: 0.01em;
       margin: 0;
       text-wrap: balance;
+      animation-delay: 220ms;
     }}
 
     .tagline {{
@@ -113,6 +130,7 @@ def get_css():
       font-size: var(--tagline-size);
       color: var(--muted);
       text-wrap: balance;
+      animation-delay: 320ms;
     }}
 
     .date-pill {{
@@ -126,6 +144,7 @@ def get_css():
       color: #6f5148;
       font-size: var(--date-size);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+      animation-delay: 420ms;
     }}
 
     .divider {{
@@ -133,6 +152,7 @@ def get_css():
       height: 1px;
       background: linear-gradient(90deg, rgba(183,132,116,0) 0%, rgba(183,132,116,0.8) 50%, rgba(183,132,116,0) 100%);
       margin: clamp(16px, 4vw, 20px) auto;
+      animation-delay: 520ms;
     }}
 
     .countdown {{
@@ -147,18 +167,32 @@ def get_css():
       background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(249,244,240,0.98) 100%);
       border: 1px solid rgba(183, 132, 116, 0.08);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 8px 18px rgba(125, 91, 79, 0.05);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }}
+
+    .box:nth-child(1) {{ animation-delay: 620ms; }}
+    .box:nth-child(2) {{ animation-delay: 720ms; }}
+    .box:nth-child(3) {{ animation-delay: 820ms; }}
+    .box:nth-child(4) {{ animation-delay: 920ms; }}
 
     .accent-box {{
       background: linear-gradient(180deg, #fff6f1 0%, #f9ebe4 100%);
     }}
 
     .number {{
+      display: inline-block;
       font-family: 'Playfair Display', serif;
       font-size: var(--number-size);
       font-weight: 700;
       line-height: 1;
       color: #241714;
+      transition: transform 220ms ease, opacity 220ms ease, filter 220ms ease;
+    }}
+
+    .number.tick {{
+      animation: number-tick 360ms ease;
     }}
 
     .label {{
@@ -217,6 +251,10 @@ def get_css():
       cursor: progress;
     }}
 
+    .music-btn.playing {{
+      animation: music-pulse 2.2s ease-in-out infinite;
+    }}
+
     .music-icon {{
       display: flex;
       align-items: center;
@@ -237,9 +275,57 @@ def get_css():
       font-size: 0;
     }}
 
+    @keyframes app-reveal {{
+      to {{
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }}
+    }}
+
+    @keyframes fade-up {{
+      to {{
+        opacity: 1;
+        transform: translateY(0);
+      }}
+    }}
+
+    @keyframes hero-drift {{
+      from {{ transform: scale(1) translateY(0); }}
+      to {{ transform: scale(1.045) translateY(-4px); }}
+    }}
+
+    @keyframes number-tick {{
+      0% {{ transform: translateY(0); opacity: 1; filter: blur(0); }}
+      40% {{ transform: translateY(-4px); opacity: 0.72; filter: blur(0.3px); }}
+      100% {{ transform: translateY(0); opacity: 1; filter: blur(0); }}
+    }}
+
     @keyframes music-spin {{
       from {{ transform: rotate(0deg); }}
       to {{ transform: rotate(360deg); }}
+    }}
+
+    @keyframes music-pulse {{
+      0%, 100% {{ box-shadow: 0 10px 22px rgba(84, 57, 50, 0.14); transform: scale(1); }}
+      50% {{ box-shadow: 0 0 0 10px rgba(183, 132, 116, 0.08), 0 12px 24px rgba(84, 57, 50, 0.18); transform: scale(1.02); }}
+    }}
+
+    @media (prefers-reduced-motion: reduce) {{
+      .app,
+      .hero,
+      .eyebrow,
+      .names,
+      .tagline,
+      .date-pill,
+      .divider,
+      .box,
+      .music-btn.playing,
+      .number.tick {{
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }}
     }}
 
     @media (max-width: 340px) {{

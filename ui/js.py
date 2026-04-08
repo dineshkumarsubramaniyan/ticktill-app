@@ -9,6 +9,8 @@ def get_js(event_str, audio_available):
         const audio = document.getElementById("bg-music");
         const btn = document.getElementById("music-btn");
         const icon = document.getElementById("music-icon");
+        const numberIds = ["days", "hours", "minutes", "seconds"];
+        const previousValues = new Map();
 
         let sourceLoaded = false;
         let isLoading = false;
@@ -16,6 +18,7 @@ def get_js(event_str, audio_available):
         function setPlayState() {{
           isLoading = false;
           btn.classList.remove("loading");
+          btn.classList.remove("playing");
           icon.innerHTML = "&#9654;";
           btn.setAttribute("aria-label", "Play background music");
         }}
@@ -23,12 +26,14 @@ def get_js(event_str, audio_available):
         function setPauseState() {{
           isLoading = false;
           btn.classList.remove("loading");
+          btn.classList.add("playing");
           icon.innerHTML = "&#10074;&#10074;";
           btn.setAttribute("aria-label", "Pause background music");
         }}
 
         function setLoadingState() {{
           isLoading = true;
+          btn.classList.remove("playing");
           btn.classList.add("loading");
           icon.innerHTML = "";
           btn.setAttribute("aria-label", "Loading background music");
@@ -50,6 +55,22 @@ def get_js(event_str, audio_available):
           audio.volume = 1.0;
         }}
 
+        function animateNumber(id, value) {{
+          const el = document.getElementById(id);
+          const nextValue = String(value).padStart(2, "0");
+          const previousValue = previousValues.get(id);
+
+          if (previousValue === nextValue) {{
+            return;
+          }}
+
+          el.classList.remove("tick");
+          void el.offsetWidth;
+          el.textContent = nextValue;
+          el.classList.add("tick");
+          previousValues.set(id, nextValue);
+        }}
+
         function updateCountdown() {{
           const now = new Date().getTime();
           const diff = Math.max(eventDate - now, 0);
@@ -59,10 +80,10 @@ def get_js(event_str, audio_available):
           const minutes = Math.floor((diff / (1000 * 60)) % 60);
           const seconds = Math.floor((diff / 1000) % 60);
 
-          document.getElementById("days").innerHTML = String(days).padStart(2, "0");
-          document.getElementById("hours").innerHTML = String(hours).padStart(2, "0");
-          document.getElementById("minutes").innerHTML = String(minutes).padStart(2, "0");
-          document.getElementById("seconds").innerHTML = String(seconds).padStart(2, "0");
+          animateNumber("days", days);
+          animateNumber("hours", hours);
+          animateNumber("minutes", minutes);
+          animateNumber("seconds", seconds);
         }}
 
         async function toggleMusic() {{
@@ -105,6 +126,10 @@ def get_js(event_str, audio_available):
         audio.addEventListener("error", function(err) {{
           console.error("Audio error:", err);
           setPlayState();
+        }});
+
+        numberIds.forEach(function(id) {{
+          previousValues.set(id, null);
         }});
 
         setPlayState();
