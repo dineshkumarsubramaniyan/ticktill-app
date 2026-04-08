@@ -8,39 +8,47 @@ def get_html(audio_src, audio_available):
     )
 
     return f"""
-    <div class="app">
-      {audio_markup}
+    <div class="shell">
+      <div class="glow glow-one"></div>
+      <div class="glow glow-two"></div>
 
-      <div class="hero"></div>
+      <div class="app">
+        {audio_markup}
 
-      <button id="music-btn" class="music-btn" type="button" aria-label="Play background music" title="{button_title}" {disabled_attr}>
-        <span id="music-icon" class="music-icon">&#9654;</span>
-      </button>
+        <div class="hero">
+          <div class="hero-overlay"></div>
+        </div>
 
-      <div class="content">
-        <div class="names">WE'RE GETTING MARRIED</div>
-        <div class="tagline">COUNTDOWN TO OUR BIG DAY</div>
+        <button id="music-btn" class="music-btn" type="button" aria-label="Play background music" title="{button_title}" {disabled_attr}>
+          <span id="music-icon" class="music-icon">&#9654;</span>
+        </button>
 
-        <div class="date">September 13, 2026</div>
+        <div class="content">
+          <div class="eyebrow">Save the date</div>
+          <div class="names">WE'RE GETTING MARRIED</div>
+          <div class="tagline">A little countdown to our forever</div>
 
-        <div class="divider"></div>
+          <div class="date-pill">September 13, 2026</div>
 
-        <div class="countdown">
-          <div class="box">
-            <div id="days" class="number">00</div>
-            <div class="label">DAYS</div>
-          </div>
-          <div class="box">
-            <div id="hours" class="number">00</div>
-            <div class="label">HOURS</div>
-          </div>
-          <div class="box">
-            <div id="minutes" class="number">00</div>
-            <div class="label">MINUTES</div>
-          </div>
-          <div class="box">
-            <div id="seconds" class="number">00</div>
-            <div class="label">SECONDS</div>
+          <div class="divider"></div>
+
+          <div class="countdown">
+            <div class="box accent-box">
+              <div id="days" class="number">00</div>
+              <div class="label">DAYS</div>
+            </div>
+            <div class="box">
+              <div id="hours" class="number">00</div>
+              <div class="label">HOURS</div>
+            </div>
+            <div class="box">
+              <div id="minutes" class="number">00</div>
+              <div class="label">MINUTES</div>
+            </div>
+            <div class="box accent-box">
+              <div id="seconds" class="number">00</div>
+              <div class="label">SECONDS</div>
+            </div>
           </div>
         </div>
       </div>

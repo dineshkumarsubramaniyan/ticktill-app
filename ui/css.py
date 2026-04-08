@@ -13,106 +13,208 @@ img_base64 = get_base64_image(BASE_DIR / "images" / "kids.png")
 
 def get_css():
     return f"""
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap');
+
+    :root {{
+      --text: #2f211d;
+      --muted: #85706a;
+      --accent: #b78474;
+      --shadow: 0 28px 70px rgba(108, 72, 59, 0.18);
+      --shell-pad-x: clamp(8px, 3vw, 14px);
+      --shell-pad-top: clamp(8px, 2.8vw, 16px);
+      --shell-pad-bottom: clamp(18px, 5vw, 32px);
+      --card-radius: clamp(24px, 6vw, 30px);
+      --hero-height: clamp(220px, 56vw, 290px);
+      --content-pad-x: clamp(16px, 4.8vw, 24px);
+      --content-pad-y: clamp(18px, 5vw, 26px);
+      --title-size: clamp(2rem, 8vw, 2.7rem);
+      --tagline-size: clamp(0.88rem, 3.2vw, 1rem);
+      --date-size: clamp(0.88rem, 3.3vw, 1rem);
+      --number-size: clamp(1.9rem, 8vw, 2.45rem);
+      --label-size: clamp(0.62rem, 2.2vw, 0.72rem);
+      --button-size: clamp(44px, 12vw, 50px);
+      --countdown-gap: clamp(10px, 3vw, 14px);
+      --countdown-pad-y: clamp(14px, 4vw, 18px);
+      --countdown-pad-x: clamp(10px, 3vw, 14px);
+    }}
+
     html, body {{
       margin: 0;
       padding: 0;
       background: transparent;
-      font-family: 'Playfair Display', serif;
     }}
 
     body {{
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 12px 0 32px;
+      padding: var(--shell-pad-top) 0 var(--shell-pad-bottom);
+      font-family: 'Outfit', sans-serif;
+    }}
+
+    .shell {{
+      position: relative;
+      width: min(100%, 430px);
+      padding: var(--shell-pad-top) var(--shell-pad-x) var(--shell-pad-bottom);
+      box-sizing: border-box;
+      overflow: hidden;
+    }}
+
+    .glow {{
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(18px);
+      opacity: 0.6;
+      pointer-events: none;
+    }}
+
+    .glow-one {{
+      top: clamp(22px, 6vw, 30px);
+      right: 6px;
+      width: clamp(72px, 22vw, 92px);
+      height: clamp(72px, 22vw, 92px);
+      background: rgba(238, 210, 196, 0.75);
+    }}
+
+    .glow-two {{
+      left: -10px;
+      bottom: clamp(58px, 16vw, 76px);
+      width: clamp(84px, 28vw, 110px);
+      height: clamp(84px, 28vw, 110px);
+      background: rgba(255, 236, 224, 0.7);
     }}
 
     .app {{
       position: relative;
-      width: 420px;
-      max-width: 420px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 24px;
+      width: 100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,250,247,0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--card-radius);
       overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
     }}
 
     .hero {{
-      height: 250px;
-      background: url('data:image/png;base64,{img_base64}') center/cover no-repeat;
+      position: relative;
+      height: var(--hero-height);
+      background: url('data:image/png;base64,{img_base64}') center top/cover no-repeat;
+    }}
+
+    .hero-overlay {{
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(66, 40, 36, 0.02) 0%, rgba(66, 40, 36, 0.18) 100%),
+        linear-gradient(180deg, rgba(255,255,255,0) 56%, rgba(255,250,247,0.96) 100%);
     }}
 
     .content {{
-      padding: 25px;
+      position: relative;
+      padding: var(--content-pad-y) var(--content-pad-x);
+      margin-top: clamp(-10px, -2vw, -6px);
       text-align: center;
+      color: var(--text);
+    }}
+
+    .eyebrow {{
+      font-size: clamp(10px, 2.8vw, 11px);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: clamp(8px, 2vw, 10px);
     }}
 
     .names {{
-      font-size: 26px;
-      font-weight: 600;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--title-size);
+      line-height: 0.94;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin: 0;
+      text-wrap: balance;
     }}
 
     .tagline {{
-      font-size: 14px;
-      color: #777;
-      margin-top: 5px;
+      margin-top: clamp(8px, 2vw, 10px);
+      font-size: var(--tagline-size);
+      color: var(--muted);
+      text-wrap: balance;
     }}
 
-    .date {{
-      margin-top: 10px;
-      font-size: 16px;
-      color: #444;
+    .date-pill {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: clamp(14px, 4vw, 18px);
+      padding: clamp(9px, 2.5vw, 11px) clamp(14px, 4vw, 20px);
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff5ef 0%, #f7ebe4 100%);
+      color: #6f5148;
+      font-size: var(--date-size);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
     }}
 
     .divider {{
-      width: 60px;
-      height: 2px;
-      background: #ddd;
-      margin: 20px auto;
+      width: clamp(62px, 18vw, 74px);
+      height: 1px;
+      background: linear-gradient(90deg, rgba(183,132,116,0) 0%, rgba(183,132,116,0.8) 50%, rgba(183,132,116,0) 100%);
+      margin: clamp(16px, 4vw, 20px) auto;
     }}
 
     .countdown {{
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--countdown-gap);
     }}
 
     .box {{
-      background: #fafafa;
-      padding: 15px;
-      border-radius: 14px;
+      padding: var(--countdown-pad-y) var(--countdown-pad-x);
+      border-radius: clamp(16px, 5vw, 20px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(249,244,240,0.98) 100%);
+      border: 1px solid rgba(183, 132, 116, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 20px rgba(125, 91, 79, 0.06);
+    }}
+
+    .accent-box {{
+      background: linear-gradient(180deg, #fff6f1 0%, #f9ebe4 100%);
     }}
 
     .number {{
-      font-size: 28px;
-      font-weight: bold;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: var(--number-size);
+      font-weight: 700;
+      line-height: 1;
+      color: #241714;
     }}
 
     .label {{
-      font-size: 10px;
-      color: #888;
-      letter-spacing: 1px;
+      margin-top: 6px;
+      font-size: var(--label-size);
+      color: #8c746d;
+      letter-spacing: 0.24em;
     }}
 
     .music-btn {{
       position: absolute;
-      top: 18px;
-      right: 18px;
+      top: clamp(12px, 3.5vw, 16px);
+      right: clamp(12px, 3.5vw, 16px);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 52px;
-      height: 52px;
+      width: var(--button-size);
+      height: var(--button-size);
       padding: 0;
       appearance: none;
       -webkit-appearance: none;
-      background: rgba(255, 255, 255, 0.92);
-      border: none;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(255,255,255,0.55);
       outline: none;
       border-radius: 999px;
       color: #4b3b35;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      box-shadow: 0 10px 22px rgba(84, 57, 50, 0.14);
+      backdrop-filter: blur(10px);
       cursor: pointer;
       z-index: 10;
       transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -120,13 +222,12 @@ def get_css():
 
     .music-btn:hover {{
       transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(0,0,0,0.22);
-      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 14px 28px rgba(84, 57, 50, 0.18);
+      background: rgba(255, 255, 255, 0.92);
     }}
 
     .music-btn:focus {{
       outline: none;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
     }}
 
     .music-btn:disabled {{
@@ -144,15 +245,15 @@ def get_css():
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 20px;
-      height: 20px;
-      font-size: 20px;
+      width: clamp(18px, 4.8vw, 20px);
+      height: clamp(18px, 4.8vw, 20px);
+      font-size: clamp(16px, 4.4vw, 18px);
       line-height: 1;
     }}
 
     .music-btn.loading .music-icon {{
-      width: 18px;
-      height: 18px;
+      width: clamp(16px, 4.2vw, 18px);
+      height: clamp(16px, 4.2vw, 18px);
       border: 2px solid rgba(75, 59, 53, 0.22);
       border-top-color: #4b3b35;
       border-radius: 50%;
@@ -163,5 +264,52 @@ def get_css():
     @keyframes music-spin {{
       from {{ transform: rotate(0deg); }}
       to {{ transform: rotate(360deg); }}
+    }}
+
+    @media (max-width: 340px) {{
+      .shell {{
+        padding-left: 6px;
+        padding-right: 6px;
+      }}
+
+      .content {{
+        padding-left: 14px;
+        padding-right: 14px;
+      }}
+
+      .label {{
+        letter-spacing: 0.18em;
+      }}
+    }}
+
+    @media (max-height: 740px) and (orientation: landscape) {{
+      :root {{
+        --hero-height: clamp(180px, 42vw, 220px);
+        --title-size: clamp(1.75rem, 4vw, 2.1rem);
+        --number-size: clamp(1.5rem, 4vw, 1.9rem);
+      }}
+
+      body {{
+        padding-top: 8px;
+        padding-bottom: 16px;
+      }}
+
+      .shell {{
+        width: min(100%, 520px);
+      }}
+
+      .content {{
+        padding-top: 16px;
+        padding-bottom: 18px;
+      }}
+
+      .countdown {{
+        gap: 10px;
+      }}
+
+      .box {{
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }}
     }}
     """
