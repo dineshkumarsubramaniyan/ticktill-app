@@ -42,7 +42,7 @@ def render_home_page(visitor_name):
     {get_js(event_str, audio_available, "")}
     """
 
-    components.html(full_code, height=860, scrolling=False)
+    components.html(full_code, height=820, scrolling=False)
 
     st.markdown("""
     <style>
@@ -72,14 +72,15 @@ def render_chat_html(thread, back_href):
     parts = [
         "<html><head><meta name='viewport' content='width=device-width, initial-scale=1' />",
         "<style>",
-        "body{margin:0;background:#f7efe9;font-family:Outfit,system-ui,sans-serif;color:#2f211d;}",
+        "html,body{margin:0;height:100%;background:#f7efe9;font-family:Outfit,system-ui,sans-serif;color:#2f211d;}",
+        "body{overflow:hidden;}",
         ".chat-page{height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#fbf6f2 0%,#f7efe9 100%);} ",
         ".chat-header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,252,249,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(184,110,87,0.12);} ",
         ".back-link{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:#f4e5dc;color:#8f5e4d;text-decoration:none;font-size:18px;font-weight:700;}",
         ".chat-title{display:flex;flex-direction:column;gap:2px;}",
         ".chat-title strong{font-size:1rem;color:#2f211d;}",
         ".chat-title span{font-size:0.78rem;color:#8d756b;}",
-        ".chat-scroll{flex:1;overflow-y:auto;padding:16px 14px 22px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;}",
+        ".chat-scroll{flex:1;overflow-y:auto;padding:16px 14px 22px;display:flex;flex-direction:column;gap:10px;scroll-behavior:auto;}",
         ".chat-empty{align-self:center;padding:14px 16px;border-radius:18px;background:#f7f2ee;color:#8b7b73;text-align:center;font-size:0.95rem;max-width:260px;}",
         ".chat-row{display:flex;width:100%;}",
         ".chat-row.left{justify-content:flex-start;}",
@@ -127,35 +128,31 @@ def render_chat_page(visitor_name):
       padding-top: 10px;
       padding-bottom: 6px;
     }
-    .chat-compose-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
+    div[data-testid="stTextInput"] {
+      width: 100%;
     }
-    div[data-testid="stTextArea"] textarea {
-      border-radius: 20px;
-      min-height: 58px;
-      max-height: 140px;
+    div[data-testid="stTextInput"] input {
+      border-radius: 999px;
+      height: 56px;
       background: #fffaf7;
       color: #2f211d !important;
       -webkit-text-fill-color: #2f211d !important;
       caret-color: #2f211d !important;
-      padding-top: 16px;
+      padding-left: 18px;
+      padding-right: 18px;
     }
-    div[data-testid="stTextArea"] textarea::placeholder {
+    div[data-testid="stTextInput"] input::placeholder {
       color: #8b7b73;
       -webkit-text-fill-color: #8b7b73;
     }
-    div[data-testid="stTextArea"] {
-      flex: 1;
-    }
     div[data-testid="stFormSubmitButton"] {
       margin: 0;
+      width: 100%;
     }
     div[data-testid="stFormSubmitButton"] button {
-      height: 58px;
-      min-width: 84px;
-      border-radius: 18px;
+      width: 100%;
+      height: 56px;
+      border-radius: 999px;
       background: linear-gradient(180deg, #c88870 0%, #b86e57 100%);
       color: white;
       border: none;
@@ -165,6 +162,7 @@ def render_chat_page(visitor_name):
     </style>
     """, unsafe_allow_html=True)
 
+    top_anchor = st.empty()
     if st.button("Back", key="back_home_button"):
         go_to_view("home", visitor_name)
 
@@ -178,9 +176,9 @@ def render_chat_page(visitor_name):
     with st.container():
         st.markdown("<div class='chat-compose-wrap'>", unsafe_allow_html=True)
         with st.form("reply_form", clear_on_submit=True):
-            left_col, right_col = st.columns([6, 1.2], vertical_alignment="bottom")
+            left_col, right_col = st.columns([5.2, 1.15], vertical_alignment="center")
             with left_col:
-                reply = st.text_area(
+                reply = st.text_input(
                     "Reply",
                     label_visibility="collapsed",
                     placeholder=f"Message as {visitor_name}...",
@@ -189,10 +187,14 @@ def render_chat_page(visitor_name):
                 submitted = st.form_submit_button("Send")
             if submitted:
                 if send_visitor_reply(visitor_name, reply):
+                    st.session_state["chat_keep_bottom"] = True
                     st.rerun()
                 else:
                     st.error("Could not send the reply to Telegram. Check your app secrets and bot setup.")
         st.markdown("</div>", unsafe_allow_html=True)
+
+    if st.session_state.pop("chat_keep_bottom", False):
+        components.html("<script>window.parent.scrollTo(0, document.body.scrollHeight);</script>", height=0)
 
 
 st.set_page_config(page_title="TickTill", page_icon="*", layout="centered")
