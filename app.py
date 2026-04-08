@@ -6,6 +6,7 @@ from ui.html import get_html
 from ui.js import get_js
 from ui.media import get_audio_source
 from utils.date_utils import get_event_date
+from utils.visitor_notifications import get_visitor_name, track_visitor_open
 
 st.set_page_config(
     page_title="TickTill",
@@ -20,6 +21,11 @@ footer {visibility: hidden;}
 header {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
+
+visitor_name = get_visitor_name(st.query_params)
+if visitor_name and not st.session_state.get("visitor_tracked"):
+    track_visitor_open(visitor_name)
+    st.session_state["visitor_tracked"] = True
 
 event = get_event_date()
 event_str = event.strftime('%Y-%m-%d %H:%M:%S')
