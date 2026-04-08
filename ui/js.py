@@ -1,19 +1,42 @@
-def get_js(event_str, audio_available):
+def get_js(event_str, audio_available, popup_message=""):
     audio_enabled = "true" if audio_available else "false"
+    popup_json = popup_message.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
 
     return f"""
     <script>
     window.onload = function() {{
         const eventDate = new Date("{event_str}").getTime();
         const audioEnabled = {audio_enabled};
+        const popupMessage = "{popup_json}";
         const audio = document.getElementById("bg-music");
         const btn = document.getElementById("music-btn");
         const icon = document.getElementById("music-icon");
+        const popup = document.getElementById("telegram-popup");
+        const popupText = document.getElementById("telegram-popup-text");
+        const popupClose = document.getElementById("telegram-popup-close");
         const numberIds = ["days", "hours", "minutes", "seconds"];
         const previousValues = new Map();
 
         let sourceLoaded = false;
         let isLoading = false;
+
+        function showPopup(message) {{
+          if (!message) {{
+            return;
+          }}
+          popupText.textContent = message;
+          popup.hidden = false;
+          requestAnimationFrame(function() {{
+            popup.classList.add("is-visible");
+          }});
+        }}
+
+        function hidePopup() {{
+          popup.classList.remove("is-visible");
+          setTimeout(function() {{
+            popup.hidden = true;
+          }}, 240);
+        }}
 
         function setPlayState() {{
           isLoading = false;
@@ -110,31 +133,25 @@ def get_js(event_str, audio_available):
         btn.addEventListener("click", toggleMusic);
         btn.addEventListener("mouseup", function() {{ btn.blur(); }});
         btn.addEventListener("touchend", function() {{ btn.blur(); }});
+        popupClose.addEventListener("click", hidePopup);
+        popup.addEventListener("click", function(event) {{
+          if (event.target === popup) {{
+            hidePopup();
+          }}
+        }});
         audio.addEventListener("playing", setPauseState);
-        audio.addEventListener("canplay", function() {{
-          if (!audio.paused) {{
-            setPauseState();
-          }}
-        }});
-        audio.addEventListener("waiting", function() {{
-          if (!audio.paused) {{
-            setLoadingState();
-          }}
-        }});
+        audio.addEventListener("canplay", function() {{ if (!audio.paused) {{ setPauseState(); }} }});
+        audio.addEventListener("waiting", function() {{ if (!audio.paused) {{ setLoadingState(); }} }});
         audio.addEventListener("pause", setPlayState);
         audio.addEventListener("ended", setPlayState);
-        audio.addEventListener("error", function(err) {{
-          console.error("Audio error:", err);
-          setPlayState();
-        }});
+        audio.addEventListener("error", function(err) {{ console.error("Audio error:", err); setPlayState(); }});
 
-        numberIds.forEach(function(id) {{
-          previousValues.set(id, null);
-        }});
+        numberIds.forEach(function(id) {{ previousValues.set(id, null); }});
 
         setPlayState();
         updateCountdown();
         setInterval(updateCountdown, 1000);
+        showPopup(popupMessage);
     }};
     </script>
     """

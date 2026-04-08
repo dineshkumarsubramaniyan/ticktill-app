@@ -19,6 +19,14 @@ def get_html(audio_src, audio_available):
           <span id="music-icon" class="music-icon">&#9654;</span>
         </button>
 
+        <div id="telegram-popup" class="telegram-popup" hidden>
+          <div class="telegram-popup-card">
+            <button id="telegram-popup-close" class="telegram-popup-close" type="button" aria-label="Close message">&times;</button>
+            <div class="telegram-popup-label">A message for you</div>
+            <div id="telegram-popup-text" class="telegram-popup-text"></div>
+          </div>
+        </div>
+
         <div class="content">
           <div class="eyebrow">Save the date</div>
           <div class="names">WE'RE GETTING MARRIED</div>
