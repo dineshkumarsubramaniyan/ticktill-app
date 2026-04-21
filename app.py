@@ -64,8 +64,8 @@ def render_home_page(visitor_name):
     </style>
     """, unsafe_allow_html=True)
 
-    if st.button("Message", key="open_chat_button", type="secondary"):
-        go_to_view("chat", visitor_name)
+    # if st.button("Message", key="open_chat_button", type="secondary"):
+    #     go_to_view("chat", visitor_name)
 
 
 def render_chat_html(thread, back_href):
